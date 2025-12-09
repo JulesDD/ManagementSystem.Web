@@ -36,7 +36,7 @@ public class LeaveTypesController : Controller
         }
 
         var leaveType = await _context.LeaveTypes
-            .FirstOrDefaultAsync(m => m.leaveTypeId == id);
+            .FirstOrDefaultAsync(m => m.LeaveTypeId == id);
         if (leaveType == null)
         {
             return NotFound();
@@ -56,7 +56,7 @@ public class LeaveTypesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("leaveTypeId,Name,NumberOfDays")] LeaveType leaveType)
+    public async Task<IActionResult> Create([Bind("LeaveTypeId,Name,NumberOfDays")] LeaveType leaveType)
     {
         if (ModelState.IsValid)
         {
@@ -88,9 +88,9 @@ public class LeaveTypesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("leaveTypeId,Name,NumberOfDays")] LeaveType leaveType)
+    public async Task<IActionResult> Edit(int id, [Bind("LeaveTypeId,Name,NumberOfDays")] LeaveType leaveType)
     {
-        if (id != leaveType.leaveTypeId)
+        if (id != leaveType.LeaveTypeId)
         {
             return NotFound();
         }
@@ -104,7 +104,7 @@ public class LeaveTypesController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LeaveTypeExists(leaveType.leaveTypeId))
+                if (!LeaveTypeExists(leaveType.LeaveTypeId))
                 {
                     return NotFound();
                 }
@@ -127,7 +127,7 @@ public class LeaveTypesController : Controller
         }
 
         var leaveType = await _context.LeaveTypes
-            .FirstOrDefaultAsync(m => m.leaveTypeId == id);
+            .FirstOrDefaultAsync(m => m.LeaveTypeId == id);
         if (leaveType == null)
         {
             return NotFound();
@@ -153,6 +153,6 @@ public class LeaveTypesController : Controller
 
     private bool LeaveTypeExists(int id)
     {
-        return _context.LeaveTypes.Any(e => e.leaveTypeId == id);
+        return _context.LeaveTypes.Any(e => e.LeaveTypeId == id);
     }
 }
