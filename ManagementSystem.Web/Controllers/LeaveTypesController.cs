@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ManagementSystem.Web.Data;
+using ManagementSystem.Web.Models.LeaveTypes;
+using AutoMapper;
 
 namespace ManagementSystem.Web.Controllers;
 
 public class LeaveTypesController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper mapper;
 
-    public LeaveTypesController(ApplicationDbContext context)
+    public LeaveTypesController(ApplicationDbContext context,IMapper mapper)
     {
         _context = context;
+        this.mapper = mapper;
     }
 
     // GET: LeaveTypes
@@ -23,7 +27,12 @@ public class LeaveTypesController : Controller
     public async Task<IActionResult> Index()
     {
         var data = await _context.LeaveTypes.ToListAsync();
-        return View(data);
+
+        //convert to datamodel into viewmodel using AutoMapper
+        var dataVm = mapper.Map<List<LeaveTypeIndexVM>>(data);
+
+        //return the view with VM
+        return View(dataVm);
     }
 
     // GET: LeaveTypes/Details/5
@@ -41,7 +50,7 @@ public class LeaveTypesController : Controller
         {
             return NotFound();
         }
-
+        var leaveTypeVm = mapper.Map<LeaveTypeIndexVM>(leaveType);
         return View(leaveType);
     }
 
