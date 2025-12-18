@@ -46,10 +46,13 @@ public class LeaveTypesController : Controller
 
         var leaveType = await _context.LeaveTypes
             .FirstOrDefaultAsync(m => m.LeaveTypeId == id);
+
         if (leaveType == null)
         {
             return NotFound();
         }
+
+        //Map data model to view model
         var leaveTypeVm = mapper.Map<LeaveTypeIndexVM>(leaveType);
         return View(leaveType);
     }
@@ -65,15 +68,16 @@ public class LeaveTypesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("LeaveTypeId,Name,NumberOfDays")] LeaveType leaveType)
+    public async Task<IActionResult> Create(LeaveTypeCreateVM leaveTypeCreateVM)
     {
         if (ModelState.IsValid)
         {
-            _context.Add(leaveType);
+            var leaveType = mapper.Map<LeaveType>(leaveTypeCreateVM);
+            _context.Add(leaveTypeCreateVM);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(leaveType);
+        return View(leaveTypeCreateVM);
     }
 
     // GET: LeaveTypes/Edit/5
