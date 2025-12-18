@@ -10,5 +10,6 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<LeaveType, LeaveTypeIndexVM>();
         CreateMap<LeaveTypeCreateVM, LeaveType>();
+        CreateMap<EditLeaveTypeVM, LeaveType>().ReverseMap();
     }
 }
