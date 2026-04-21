@@ -14,12 +14,12 @@ namespace ManagementSystem.Web.Controllers;
 public class LeaveTypesController : Controller
 {
     private readonly ApplicationDbContext _context;
-    private readonly IMapper mapper;
+    private readonly IMapper _mapper;
 
     public LeaveTypesController(ApplicationDbContext context,IMapper mapper)
     {
         _context = context;
-        this.mapper = mapper;
+        _mapper = mapper;
     }
 
     // GET: LeaveTypes
@@ -29,7 +29,7 @@ public class LeaveTypesController : Controller
         var data = await _context.LeaveTypes.ToListAsync();
 
         //convert to datamodel into viewmodel using AutoMapper
-        var dataVm = mapper.Map<List<LeaveTypeIndexVM>>(data);
+        var dataVm = _mapper.Map<List<LeaveTypeIndexVM>>(data);
 
         //return the view with VM
         return View(dataVm);
@@ -53,7 +53,7 @@ public class LeaveTypesController : Controller
         }
 
         //Map data model to view model
-        var leaveTypeVm = mapper.Map<LeaveTypeIndexVM>(leaveType);
+        var leaveTypeVm = _mapper.Map<LeaveTypeIndexVM>(leaveType);
         return View(leaveType);
     }
 
@@ -68,12 +68,17 @@ public class LeaveTypesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(LeaveTypeCreateVM leaveTypeCreateVM)
+    public async Task<IActionResult> Create(CreateLeaveTypeVM leaveTypeCreateVM)
     {
+        if(await CheckIfLeaveTypeNameExists(leaveTypeCreateVM.Name))
+        {
+            ModelState.AddModelError(nameof(leaveTypeCreateVM.Name), "Leave type with this name already exists.");
+        }
+
         if (ModelState.IsValid)
         {
-            var leaveType = mapper.Map<LeaveType>(leaveTypeCreateVM);
-            _context.Add(leaveTypeCreateVM);
+            var leaveType = _mapper.Map<LeaveType>(leaveTypeCreateVM);
+            _context.Add(leaveType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -94,7 +99,7 @@ public class LeaveTypesController : Controller
             return NotFound();
         }
 
-        var leaveTypeVm = mapper.Map<EditLeaveTypeVM>(leaveType);
+        var leaveTypeVm = _mapper.Map<EditLeaveTypeVM>(leaveType);
 
         return View(leaveTypeVm);
     }
@@ -111,11 +116,16 @@ public class LeaveTypesController : Controller
             return NotFound();
         }
 
+        if (await CheckIfLeaveTypeNameExistsForEdit(editLeaveTypeVM))
+        {
+            ModelState.AddModelError(nameof(editLeaveTypeVM.Name), "Leave type with this name already exists.");
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
-                var leaveTypeVm = mapper.Map<LeaveType>(editLeaveTypeVM);
+                var leaveTypeVm = _mapper.Map<LeaveType>(editLeaveTypeVM);
                 _context.Update(leaveTypeVm);
                 await _context.SaveChangesAsync();
             }
@@ -166,6 +176,18 @@ public class LeaveTypesController : Controller
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task<bool> CheckIfLeaveTypeNameExists(string name)
+    {
+        var lowercaseName = name.ToLower();
+        return await _context.LeaveTypes.AnyAsync(lt => lt.Name.ToLower().Equals(lowercaseName));
+    }
+
+    private async Task<bool> CheckIfLeaveTypeNameExistsForEdit(EditLeaveTypeVM editLeaveTypeVM)
+    {
+        var lowercaseName = editLeaveTypeVM.Name.ToLower();
+        return await _context.LeaveTypes.AnyAsync(lt => lt.Name.ToLower().Equals(lowercaseName) && lt.LeaveTypeId != editLeaveTypeVM.LeaveTypeId);
     }
 
     private bool LeaveTypeExists(int id)

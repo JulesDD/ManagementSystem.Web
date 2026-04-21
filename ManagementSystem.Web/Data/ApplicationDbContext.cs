@@ -12,4 +12,4 @@ public class ApplicationDbContext : IdentityDbContext
     }
     public DbSet<LeaveType> LeaveTypes { get; set; }
 
-}
+    }

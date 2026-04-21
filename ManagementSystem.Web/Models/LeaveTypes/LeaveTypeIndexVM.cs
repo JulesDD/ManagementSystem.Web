@@ -2,7 +2,8 @@
 
 namespace ManagementSystem.Web.Models.LeaveTypes;
 
-public class LeaveTypeCreateVM
+
+public class LeaveTypeIndexVM : BaseLeaveTypeVM
 {
     [Required]
     [MinLength(3, ErrorMessage = "Employee name should be more than 3 characters long")]
@@ -10,4 +11,5 @@ public class LeaveTypeCreateVM
     [Required]
     [Range(1, 90, ErrorMessage = "Please enter a valid number of days between 1 and 90")]
     public int NumberOfDays { get; set; }
+
 }
