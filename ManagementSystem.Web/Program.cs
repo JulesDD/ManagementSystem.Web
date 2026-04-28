@@ -1,5 +1,6 @@
 using ManagementSystem.Web.Data;
 using ManagementSystem.Web.MappingProfile;
+using ManagementSystem.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// Add services
+builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
