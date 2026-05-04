@@ -2,6 +2,7 @@ using ManagementSystem.Web.Data;
 using ManagementSystem.Web.MappingProfile;
 using ManagementSystem.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +19,11 @@ builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// Add email sender service
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
