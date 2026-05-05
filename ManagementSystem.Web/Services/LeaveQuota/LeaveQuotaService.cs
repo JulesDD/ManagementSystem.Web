@@ -20,12 +20,13 @@ public class LeaveQuotaService(ApplicationDbContext _context) : ILeaveQuotaServi
         //calculate the leave based on number of months left in the year
         foreach (var leaveType in leaveTypes)
         {
+            var accuralRate = decimal.Divide(leaveType.NumberOfDays, 12);
             var leaveQuota = new LeaveQuota
             {
                 EmployeeId = EmployeeId,
                 LeaveTypeId = leaveType.Id,
                 PeriodId = period.Id,
-                NumberOfDays = leaveType.NumberOfDays / monthsRemaining
+                NumberOfDays = (int)Math.Ceiling(accuralRate * monthsRemaining)
             };
             _context.Add(leaveQuota);
         }
