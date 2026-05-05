@@ -46,5 +46,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             });
     }
     public DbSet<LeaveType> LeaveTypes { get; set; }
+    public DbSet<LeaveQuota> LeaveQuotas { get; set; }
+    public DbSet<Period> Periods { get; set; }
 
     }

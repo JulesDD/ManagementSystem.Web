@@ -19,7 +19,7 @@ public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : 
 
     public async Task<T?> Get<T>(int id) where T : class
     {
-        var leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(lt => lt.LeaveTypeId == id);
+        var leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(lt => lt.Id == id);
         if (leaveType == null)
         {
             return null;
@@ -29,7 +29,7 @@ public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : 
 
     public async Task Delete(int id)
     {
-        var leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(lt => lt.LeaveTypeId == id);
+        var leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(lt => lt.Id == id);
         if (leaveType != null)
         {
             _context.LeaveTypes.Remove(leaveType);
@@ -60,12 +60,12 @@ public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : 
     public async Task<bool> CheckIfLeaveTypeNameExistsForEdit(EditLeaveTypeVM editLeaveTypeVM)
     {
         var lowercaseName = editLeaveTypeVM.Name.ToLower();
-        return await _context.LeaveTypes.AnyAsync(lt => lt.Name.ToLower().Equals(lowercaseName) && lt.LeaveTypeId != editLeaveTypeVM.LeaveTypeId);
+        return await _context.LeaveTypes.AnyAsync(lt => lt.Name.ToLower().Equals(lowercaseName) && lt.Id != editLeaveTypeVM.Id);
     }
 
     public bool LeaveTypeExists(int id)
     {
-        return _context.LeaveTypes.Any(e => e.LeaveTypeId == id);
+        return _context.LeaveTypes.Any(e => e.Id == id);
     }
 
 }

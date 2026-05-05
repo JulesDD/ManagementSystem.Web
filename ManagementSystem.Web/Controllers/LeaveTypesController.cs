@@ -96,7 +96,7 @@ public class LeaveTypesController(ILeaveTypeService _leaveTypeService) : Control
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, EditLeaveTypeVM editLeaveTypeVM)
     {
-        if (id != editLeaveTypeVM.LeaveTypeId)
+        if (id != editLeaveTypeVM.Id)
         {
             return NotFound();
         }
@@ -114,7 +114,7 @@ public class LeaveTypesController(ILeaveTypeService _leaveTypeService) : Control
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_leaveTypeService.LeaveTypeExists(editLeaveTypeVM.LeaveTypeId))
+                if (!_leaveTypeService.LeaveTypeExists(editLeaveTypeVM.Id))
                 {
                     return NotFound();
                 }
