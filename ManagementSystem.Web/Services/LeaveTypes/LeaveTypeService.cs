@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using ManagementSystem.Web.Data;
 using ManagementSystem.Web.Models.LeaveTypes;
+using ManagementSystem.Web.Services.LeaveTypes;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
-namespace ManagementSystem.Web.Services;
+namespace ManagementSystem.Web.Services.LeaveTypes;
 
 public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : ILeaveTypeService
 {

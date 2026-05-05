@@ -1,6 +1,8 @@
 using ManagementSystem.Web.Data;
 using ManagementSystem.Web.MappingProfile;
-using ManagementSystem.Web.Services;
+using ManagementSystem.Web.Services.Email;
+using ManagementSystem.Web.Services.LeaveQuotas;
+using ManagementSystem.Web.Services.LeaveTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add services
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+builder.Services.AddScoped<ILeaveQuotaService, LeaveQuotaService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());

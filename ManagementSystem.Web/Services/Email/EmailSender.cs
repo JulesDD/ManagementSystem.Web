@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net.Mail;
 
-namespace ManagementSystem.Web.Services;
+namespace ManagementSystem.Web.Services.Email;
 
 public class EmailSender(IConfiguration _configuration) : IEmailSender
 {
