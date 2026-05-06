@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using ManagementSystem.Web.Services.LeaveQuotas;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,8 +32,10 @@ namespace ManagementSystem.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ILeaveQuotaService _leaveQuotaService;
 
         public RegisterModel(
+            ILeaveQuotaService leaveQuotaService,
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
@@ -40,6 +43,7 @@ namespace ManagementSystem.Web.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            this._leaveQuotaService = leaveQuotaService;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = (IUserEmailStore<ApplicationUser>)GetEmailStore();
@@ -176,6 +180,7 @@ namespace ManagementSystem.Web.Areas.Identity.Pages.Account
                     }
 
                     var userId = await _userManager.GetUserIdAsync(user);
+                    await _leaveQuotaService.QuotaLeave(userId);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
