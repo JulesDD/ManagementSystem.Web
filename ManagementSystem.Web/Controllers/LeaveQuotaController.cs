@@ -12,7 +12,7 @@ public class LeaveQuotaController(ILeaveQuotaService _leaveQuotaService) : Contr
 {
 
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Details()
     {
         var leaveQuota = await _leaveQuotaService.GetQuota();
         return View();

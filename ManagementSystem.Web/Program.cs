@@ -21,6 +21,7 @@ builder.Services.AddScoped<ILeaveQuotaService, LeaveQuotaService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<LeaveTypeAutoMapperProfile>());
 
 // Add email sender service
 builder.Services.AddTransient<IEmailSender, EmailSender>();
