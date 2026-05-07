@@ -3,4 +3,5 @@
 public interface ILeaveQuotaService
 {
     Task QuotaLeave(string EmployeeId);
+    Task<List<LeaveQuota>> GetQuota();
 }

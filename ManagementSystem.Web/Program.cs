@@ -25,6 +25,8 @@ builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
 // Add email sender service
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
