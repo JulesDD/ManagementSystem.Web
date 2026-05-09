@@ -1,0 +1,73 @@
+﻿@model EmployeeQuotaVM
+
+@{
+    ViewData["Title"] = "Leave Quota Details";
+}
+<h1>View Leave Breaks for @Model.FirstName @Model.LastName</h1>
+<br />
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(Model => Model.DateOfBirth)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(Model => Model.DateOfBirth)
+        </dd>
+    </dl>
+    <hr />
+</div>
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        <h4>Leave Quota</h4>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col">Leave Name</div>
+                <div class="col">Original Quota</div>
+                <div class="col">Current Quota</div>
+                <div class="col">Action</div>
+            </div>
+        </li>
+
+        @foreach (var item in Model.LeaveQuotas)
+        {
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col">@item.LeaveType.Name</div>
+                    <div class="col">
+                        <span class="badge round-pill text-bg-primary">
+                            @item.NumberOfDays
+                        </span>
+                    </div>
+                    <div class="col">
+                        <span class="badge round-pill text-bg-warning">
+                            @item.NumberOfDays
+                        </span>
+                    </div>
+                    <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

@@ -11,6 +11,6 @@ public class LeaveQuotaVM
     public int NumberOfDays { get; set; }
 
     [Display(Name = "Leave Period")]
-    public PeriodVM LeavePeriod { get; set; } = new PeriodVM();
-    public BaseLeaveTypeVM LeaveType { get; set; } = new BaseLeaveTypeVM();
+    public PeriodVM Period { get; set; } = new PeriodVM();
+    public LeaveTypeIndexVM LeaveType { get; set; } = new LeaveTypeIndexVM();
 }

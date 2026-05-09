@@ -2,7 +2,7 @@
 
 namespace ManagementSystem.Web.Models.LeaveTypes
 {
-    public class BaseLeaveTypeVM
+    public abstract class BaseLeaveTypeVM
     {
         public int Id { get; set; }
     }

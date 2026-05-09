@@ -10,11 +10,9 @@ namespace ManagementSystem.Web.Controllers;
 [Authorize]
 public class LeaveQuotaController(ILeaveQuotaService _leaveQuotaService) : Controller
 {
-
-
     public async Task<IActionResult> Details()
     {
-        var leaveQuota = await _leaveQuotaService.GetQuota();
-        return View();
+        var employeeVM = await _leaveQuotaService.GetEmployeeQuotas();
+        return View(employeeVM);
     }
 }

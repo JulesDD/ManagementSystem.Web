@@ -61,7 +61,7 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
 
     // get the leave quotas for the current employee and return them in a view model
     // the view model should contain the employee's name, email, and a list of leave quotas with the leave type and number of days
-    public async Task<EmployeeQuotaVM> GetEmployeeQuota()
+    public async Task<EmployeeQuotaVM> GetEmployeeQuotas()
     {
         var quotas = await GetQuota();
         var quotaList = _mapper.Map<List<LeaveQuota>, List<LeaveQuotaVM>>(quotas);
