@@ -10,9 +10,25 @@ namespace ManagementSystem.Web.Controllers;
 [Authorize]
 public class LeaveQuotaController(ILeaveQuotaService _leaveQuotaService) : Controller
 {
-    public async Task<IActionResult> Details()
+    [Authorize(Roles = "Administrator")]
+    public async Task<IActionResult> Index()
     {
-        var employeeVM = await _leaveQuotaService.GetEmployeeQuotas();
+        var employeeVM = await _leaveQuotaService.GetEmployees();
+        return View(employeeVM);
+    }
+
+    [Authorize(Roles = "Administrator")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> QuotaLeave(string? id)
+    {
+        await _leaveQuotaService.QuotaLeave(id);
+        return RedirectToAction(nameof(Details), new { userId = id });
+    }
+
+    public async Task<IActionResult> Details(string? userId)
+    {
+        var employeeVM = await _leaveQuotaService.GetEmployeeQuotas(userId);
         return View(employeeVM);
     }
 }

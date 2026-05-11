@@ -2,10 +2,15 @@
 
 @{
     ViewData["Title"] = "Leave Quota Details";
+    var isAdmin = User.IsInRole("Administrator");
+    string message = isAdmin ? "There are no allocations for the current period." : "You have no leave quota for the current period. Please contact your administrator to set up your leave quota.";
 }
 <h1>View Leave Breaks for @Model.FirstName @Model.LastName</h1>
 <br />
-
+@if(isAdmin)
+{
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+}
 <div>
     <hr />
     <dl class="row">
@@ -36,6 +41,13 @@
     </dl>
     <hr />
 </div>
+@if(isAdmin && !Model.IsQuotaEmpty)
+{
+    <form asp-action="QuotaLeave">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Quota Leave" class="btn btn-danger" />  
+    </form>
+}
 @if (Model.LeaveQuotas.Any())
 {
     <div class="card" style="width: 18rem;">
@@ -79,7 +91,7 @@ else
 {
     <div class="alert alert-warning" role="alert">
         <h2>
-            You have no leave quota for the current period. Please contact your administrator to set up your leave quota.
+            @message
         </h2>
     </div>
 }

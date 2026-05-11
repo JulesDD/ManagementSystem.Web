@@ -6,6 +6,8 @@ namespace ManagementSystem.Web.Data;
 public class LeaveType : BaseEntity
 {
     [MaxLength(150)]
-    public string Name { get; set; } = string.Empty;
-    public int NumberOfDays { get; set; } = 0;
+    public string Name { get; set; }
+    public int NumberOfDays { get; set; }
+
+    public List<LeaveQuota>? LeaveQuotas { get; set; }
 }
