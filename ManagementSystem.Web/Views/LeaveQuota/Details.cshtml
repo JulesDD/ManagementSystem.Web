@@ -36,38 +36,50 @@
     </dl>
     <hr />
 </div>
-<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        <h4>Leave Quota</h4>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col">Leave Name</div>
-                <div class="col">Original Quota</div>
-                <div class="col">Current Quota</div>
-                <div class="col">Action</div>
-            </div>
-        </li>
-
-        @foreach (var item in Model.LeaveQuotas)
-        {
+@if (Model.LeaveQuotas.Any())
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            <h4>Leave Quota for period @Model.LeaveQuotas[0].Period.Name</h4>
+        </div>
+        <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <div class="row">
-                    <div class="col">@item.LeaveType.Name</div>
-                    <div class="col">
-                        <span class="badge round-pill text-bg-primary">
-                            @item.NumberOfDays
-                        </span>
-                    </div>
-                    <div class="col">
-                        <span class="badge round-pill text-bg-warning">
-                            @item.NumberOfDays
-                        </span>
-                    </div>
-                    <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                    <div class="col">Leave Name</div>
+                    <div class="col">Original Quota</div>
+                    <div class="col">Current Quota</div>
+                    <div class="col">Action</div>
                 </div>
             </li>
-        }
-    </ul>
-</div>
+
+            @foreach (var item in Model.LeaveQuotas)
+            {
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col">@item.LeaveType.Name</div>
+                        <div class="col">
+                            <span class="badge round-pill text-bg-primary">
+                                @item.NumberOfDays
+                            </span>
+                        </div>
+                        <div class="col">
+                            <span class="badge round-pill text-bg-warning">
+                                @item.NumberOfDays
+                            </span>
+                        </div>
+                        <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+    
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        <h2>
+            You have no leave quota for the current period. Please contact your administrator to set up your leave quota.
+        </h2>
+    </div>
+}

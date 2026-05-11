@@ -48,13 +48,14 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
     public async Task<List<LeaveQuota>> GetQuota()
     {
         var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+        var currentDate = DateTime.Now;
+        var period = await _context.Periods.SingleAsync(q => q.EndDate.Year == currentDate.Year);
 
         var leaveQuotas = await _context.LeaveQuotas
             .Include(q => q.LeaveType)
             .Include(q => q.Period)
-            .Where(q => q.EmployeeId == user.Id)
+            .Where(q => q.EmployeeId == user.Id && q.PeriodId == period.Id)
             .ToListAsync();
-
 
         return leaveQuotas;
     }
