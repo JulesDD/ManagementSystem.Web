@@ -79,7 +79,13 @@
                                 @item.NumberOfDays
                             </span>
                         </div>
-                        <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                        <div class="col">
+                            @if (isAdmin)
+                            {
+                                <a class="btn btn-warning" asp-action="EditQuota" asp-route-id="@item.Id">Edit Quota</a>
+                            }
+                            <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                        </div>
                     </div>
                 </li>
             }

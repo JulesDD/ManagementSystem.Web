@@ -7,6 +7,8 @@ public interface ILeaveQuotaService
     Task QuotaLeave(string EmployeeId);
     Task<List<LeaveQuota>> GetQuota(string? userId);
     Task<EmployeeQuotaVM> GetEmployeeQuotas(string? userId);
+    Task<LeaveQuotaEditVM> GetEmployeeQuota(int? quotaId);
 
     Task<List<EmployeeListVM>> GetEmployees();
+    Task EditEmployeeQuota(LeaveQuotaEditVM leaveQuotaEditVM);
 }

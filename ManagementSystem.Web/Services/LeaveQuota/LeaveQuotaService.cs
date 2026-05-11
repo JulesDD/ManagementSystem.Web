@@ -92,6 +92,35 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
         return employeeList;
     }
 
+    // get the leave quota for a specific employee and return it in a view model
+    public async Task<LeaveQuotaEditVM> GetEmployeeQuota(int? quotaId)
+    {
+        var quota = await _context.LeaveQuotas
+            .Include(q => q.LeaveType)
+            .Include(q => q.Employee)
+            .FirstOrDefaultAsync(q => q.Id == quotaId);
+
+        var model = _mapper.Map<LeaveQuotaEditVM>(quota);
+
+        return model;
+
+    }
+
+    // edit the leave quota for a specific employee
+    // the edit should only allow changing the number of days for the leave quota
+    public async Task EditEmployeeQuota(LeaveQuotaEditVM leaveQuotaEditVM)
+    {
+        //var quota = await GetEmployeeQuota(leaveQuotaEditVM.Id) ?? throw new Exception("Leave quota not found"); 
+        //quota.NumberOfDays = leaveQuotaEditVM.NumberOfDays;
+        //_context.Entry(quota).State = EntityState.Modified;
+        //await _context.SaveChangesAsync();
+
+        await _context.LeaveQuotas
+            .Where(q => q.Id == leaveQuotaEditVM.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty( d => d.NumberOfDays, leaveQuotaEditVM.NumberOfDays ));
+    }
+
+    // check if the leave quota for a specific employee and leave type already exists for the current period
     private async Task<bool> QuotaExist(string userId, int periodId, int leaveTypeId)
     {
         return await _context.LeaveQuotas.AnyAsync(q => q.EmployeeId == userId && q.PeriodId == periodId && q.LeaveTypeId == leaveTypeId);

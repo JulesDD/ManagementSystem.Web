@@ -69,4 +69,10 @@ public class LeaveTypeService(ApplicationDbContext _context, IMapper _mapper) : 
         return _context.LeaveTypes.Any(e => e.Id == id);
     }
 
+    public async Task<bool> DaysExceedLimit(int numberOfDays, int leaveTypeId)
+    {
+        var leaveTypes = await _context.LeaveTypes.ToListAsync();
+        return leaveTypes.Any(lt => lt.Id == leaveTypeId && lt.NumberOfDays < numberOfDays);
+    }
+
 }
