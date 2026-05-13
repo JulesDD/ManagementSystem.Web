@@ -2,6 +2,7 @@ using ManagementSystem.Web.Data;
 using ManagementSystem.Web.MappingProfile;
 using ManagementSystem.Web.Services.Email;
 using ManagementSystem.Web.Services.LeaveQuotas;
+using ManagementSystem.Web.Services.LeaveRequests;
 using ManagementSystem.Web.Services.LeaveTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -18,10 +19,13 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Add services
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 builder.Services.AddScoped<ILeaveQuotaService, LeaveQuotaService>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<LeaveTypeAutoMapperProfile>());
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<LeaveRequestAutoMapperProfile>());
 
 // Add email sender service
 builder.Services.AddTransient<IEmailSender, EmailSender>();

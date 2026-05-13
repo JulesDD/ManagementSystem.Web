@@ -50,7 +50,7 @@
 }
 @if (Model.LeaveQuotas.Any())
 {
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 25rem;">
         <div class="card-header">
             <h4>Leave Quota for period @Model.LeaveQuotas[0].Period.Name</h4>
         </div>
@@ -84,7 +84,7 @@
                             {
                                 <a class="btn btn-warning" asp-action="EditQuota" asp-route-id="@item.Id">Edit Quota</a>
                             }
-                            <a asp-asp-controller="LeaveRequest" asp-action="Create" class="btn-sucess">Request Time Off</a>
+                            <a asp-controller="LeaveRequest" asp-action="Create" class="btn btn-success">Request Time Off</a>
                         </div>
                     </div>
                 </li>

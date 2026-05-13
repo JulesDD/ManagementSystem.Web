@@ -14,7 +14,7 @@ public class LeaveRequest : BaseEntity
     public ApplicationUser? Employee { get; set; }
     public string? EmployeeId { get; set; } = default!;
 
-    public ApplicationUser reviewer { get; set; }
+    public ApplicationUser? Reviewer { get; set; }
     public string? ReviewerId { get; set; }
 
     public string? RequestComments { get; set; }
