@@ -1,8 +1,9 @@
 ﻿@model EmployeeQuotaVM
 
 @{
-    ViewData["Title"] = "Leave Quota Details";
+    ViewData["Title"] = "View Leave Quota Details";
     var isAdmin = User.IsInRole("Administrator");
+    var isEmployee = User.IsInRole("Employee");
     string message = isAdmin ? "There are no allocations for the current period." : "You have no leave quota for the current period. Please contact your administrator to set up your leave quota.";
 }
 <h1>View Leave Breaks for @Model.FirstName @Model.LastName</h1>
@@ -10,6 +11,12 @@
 @if(isAdmin)
 {
     <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <br />
+}
+@if(isEmployee)
+{
+    <a asp-controller="LeaveRequest" asp-action="Index" class="btn btn-primary">View Request History</a>
+    <br />
 }
 <div>
     <hr />

@@ -13,7 +13,8 @@ public class LeaveRequestController(ILeaveTypeService _leaveTypeService, ILeaveR
     //Employee can view their leave requests
     public async Task<IActionResult> Index()
     {
-        return View();
+        var model = await _leaveRequestService.GetEmployeeLeaveRequests();
+        return View(model);
     }
 
     // Employee can create a new leave request
@@ -57,9 +58,10 @@ public class LeaveRequestController(ILeaveTypeService _leaveTypeService, ILeaveR
     //Employee can cancel a pending leave request
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Cancel(int leaveRequestId)
+    public async Task<IActionResult> Cancel(int id)
     {
-        return View();
+        await _leaveRequestService.CancelLeaveRequest(id);
+        return RedirectToAction(nameof(Index));
     }
 
     //Admin can view all leave requests

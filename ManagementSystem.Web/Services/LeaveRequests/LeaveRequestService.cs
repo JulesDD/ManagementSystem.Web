@@ -10,9 +10,20 @@ namespace ManagementSystem.Web.Services.LeaveRequests;
 public partial class LeaveRequestService(ApplicationDbContext _context, IMapper _mapper, UserManager<ApplicationUser> _userManager, IHttpContextAccessor _httpContextAccessor,
     ApplicationDbContext _dbContext) : ILeaveRequestService
 {
-    public Task CancelLeaveRequest(int leaveRequestId)
+    public async Task CancelLeaveRequest(int leaveRequestId)
     {
-        throw new NotImplementedException();
+        var leaveRequest = await _dbContext.LeaveRequests.FindAsync(leaveRequestId);
+        leaveRequest.LeaveStatusId = (int)LeaveRequestStatusEnum.Cancelled;
+
+        //restore the employee's leave quota for the cancelled request
+        var numberOfDays = leaveRequest.EndDate.DayNumber - leaveRequest.StartDate.DayNumber;
+        var quotaToRestore = await _dbContext.LeaveQuotas
+            .FirstAsync(q => q.LeaveTypeId == leaveRequest.LeaveTypeId && q.EmployeeId == leaveRequest.EmployeeId);
+
+        quotaToRestore.NumberOfDays += numberOfDays;
+
+       _dbContext.SaveChanges();
+
     }
 
     public async Task CreateLeaveRequest(CreateLeaveRequestVM model)
@@ -21,7 +32,7 @@ public partial class LeaveRequestService(ApplicationDbContext _context, IMapper 
         var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
         leaveRequest.EmployeeId = user.Id;
         
-        leaveRequest.LeaveStatusId = (int)LeaveRequestStatus.Pending;
+        leaveRequest.LeaveStatusId = (int)LeaveRequestStatusEnum.Pending;
         _dbContext.Add(leaveRequest);
 
         var numberOfDays = model.EndDate.DayNumber - model.StartDate.DayNumber;
@@ -37,9 +48,25 @@ public partial class LeaveRequestService(ApplicationDbContext _context, IMapper 
         throw new NotImplementedException();
     }
 
-    public Task<EmployeeLeaveRequestListVM> GetEmployeeLeaveRequests(string employeeId)
+    public async Task<List<LeaveRequestListVM>> GetEmployeeLeaveRequests()
     {
-        throw new NotImplementedException();
+        var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+        var leaveRequests = await _dbContext.LeaveRequests
+            .Include(lr => lr.LeaveType)
+            .Where(lr => lr.EmployeeId == user.Id)
+            .ToListAsync();
+
+        var model = leaveRequests.Select(lr => new LeaveRequestListVM
+        {
+            Id = lr.Id,
+            StartDate = lr.StartDate,
+            EndDate = lr.EndDate,
+            NumberOfDays = lr.EndDate.DayNumber - lr.StartDate.DayNumber,
+            LeaveType = lr.LeaveType.Name,
+            LeaveRequestStatus = (LeaveRequestStatusEnum)lr.LeaveStatusId
+        }).ToList();
+
+        return model;
     }
 
     public async Task<bool> RequestDatesExceedQuota(CreateLeaveRequestVM model)
@@ -56,4 +83,5 @@ public partial class LeaveRequestService(ApplicationDbContext _context, IMapper 
     {
         throw new NotImplementedException();
     }
+
 }
