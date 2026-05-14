@@ -11,4 +11,6 @@ public interface ILeaveQuotaService
 
     Task<List<EmployeeListVM>> GetEmployees();
     Task EditEmployeeQuota(LeaveQuotaEditVM leaveQuotaEditVM);
+
+    Task<LeaveQuota> GetCurrentQuota(int leaveTypeId, string employeeId);
 }

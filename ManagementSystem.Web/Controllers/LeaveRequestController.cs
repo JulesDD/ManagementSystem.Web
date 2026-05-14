@@ -67,18 +67,21 @@ public class LeaveRequestController(ILeaveTypeService _leaveTypeService, ILeaveR
     //Admin can view all leave requests
     public async Task<IActionResult> ListRequests()
     {
-        return View();
+        var model = await _leaveRequestService.GetAllLeaveRequests();
+        return View(model);
     }
 
-    public async Task<IActionResult> Review(int leaveRequestId)
-    {
-        return View();
+    public async Task<IActionResult> Review(int id)
+    {   
+        var model = await _leaveRequestService.GetLeaveRequestForReview(id);
+        return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Review()
+    public async Task<IActionResult> Review(int id, bool approved)
     {
-        return View();
+        await _leaveRequestService.ReviewLeaveRequest(id, approved);
+        return RedirectToAction(nameof(ListRequests));
     }
 }

@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using ManagementSystem.Web.Models.LeaveQuotas;
 using ManagementSystem.Web.Models.LeaveTypes;
+using ManagementSystem.Web.Services.Periods;
+using ManagementSystem.Web.Services.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManagementSystem.Web.Services.LeaveQuotas;
 
-public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccessor _httpContextAccessor, UserManager<ApplicationUser> _userManager, IMapper _mapper) : ILeaveQuotaService
+public class LeaveQuotaService(ApplicationDbContext _context, IMapper _mapper, IPeriodsService _periodsService, IUsersService _usersService) : ILeaveQuotaService
 {
     // this method will be called when an employee is registered to calculate the leave quota for the employee based on the leave types and the current period
     // the leave quota will be calculated based on the number of months left in the year and the number of days for each leave type
@@ -17,15 +19,8 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
         var leaveTypes = await _context.LeaveTypes.Where(q => !q.LeaveQuotas.Any(x => x.EmployeeId == employeeId)).ToListAsync();
 
         //get the current period based on year
-        var currentDate = DateTime.Now;
-        var period = await _context.Periods.SingleAsync(q => q.EndDate.Year == currentDate.Year);
-        var monthsRemaining = period.EndDate.Month - currentDate.Month;
-
-        if (period == null)
-        {
-            throw new InvalidOperationException(
-                $"Registration failed: No period configured for year {currentDate.Year}");
-        }
+        var period = await _periodsService.GetCurrentPeriod();
+        var monthsRemaining = period.EndDate.Month - DateTime.Now.Month;
 
         //for each leave type, check if there is a leave quota for the employee for the current period
         //calculate the leave based on number of months left in the year
@@ -65,7 +60,7 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
     // the view model should contain the employee's name, email, and a list of leave quotas with the leave type and number of days
     public async Task<EmployeeQuotaVM> GetEmployeeQuotas(string? userId)
     {
-        var user = string.IsNullOrEmpty(userId) ? await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User) : await _userManager.FindByIdAsync(userId);
+        var user = string.IsNullOrEmpty(userId) ? await _usersService.GetCurrentUser() : await _usersService.GetUserById(userId);
         var quotas = await GetQuota(user.Id);
         var quotaList = _mapper.Map<List<LeaveQuota>, List<LeaveQuotaVM>>(quotas);
         var leaveTypesCount = await _context.LeaveTypes.CountAsync();
@@ -86,7 +81,7 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
     // get the leave quotas for all employees and return them in a view model
     public async Task<List<EmployeeListVM>> GetEmployees()
     {
-        var employees = await _userManager.GetUsersInRoleAsync("Employee");
+        var employees = await _usersService.GetEmployees();
         var employeeList = _mapper.Map<List<ApplicationUser>, List<EmployeeListVM>>(employees.ToList());
 
         return employeeList;
@@ -118,6 +113,14 @@ public class LeaveQuotaService(ApplicationDbContext _context, IHttpContextAccess
         await _context.LeaveQuotas
             .Where(q => q.Id == leaveQuotaEditVM.Id)
             .ExecuteUpdateAsync(s => s.SetProperty( d => d.NumberOfDays, leaveQuotaEditVM.NumberOfDays ));
+    }
+
+    public async Task<LeaveQuota> GetCurrentQuota(int leaveTypeId, string employeeId)
+    {
+        var period = await _periodsService.GetCurrentPeriod();
+        var quota = await _context.LeaveQuotas.FirstAsync(q => q.LeaveTypeId == leaveTypeId && q.EmployeeId == employeeId && q.PeriodId == period.Id);
+
+        return quota;
     }
 
     // check if the leave quota for a specific employee and leave type already exists for the current period

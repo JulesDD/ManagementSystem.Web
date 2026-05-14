@@ -33,6 +33,7 @@
                                         <li><a class="dropdown-item" asp-area="" asp-controller="LeaveTypes" asp-action="Index">Leave Types</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Periods" asp-action="Index">Periods</a></li>
                                         <li><a class="dropdown-item" asp-area="" asp-controller="LeaveQuota" asp-action="Index">Employee Time Card</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="LeaveRequest" asp-action="ListRequests">Manage Requests</a></li>
                                     </ul>
                                 </li>
                             }
@@ -62,6 +63,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
