@@ -19,10 +19,11 @@ public class LeaveRequestController(ILeaveTypeService _leaveTypeService, ILeaveR
 
     // Employee can create a new leave request
     // GET: LeaveRequest/Create
-    public async Task<IActionResult> Create()
+    [HttpGet]
+    public async Task<IActionResult> Create(int? leaveTypeId)
     {
         var leaveTypes = await _leaveTypeService.GetAllLeaveTypes();
-        var selectLeaveTypes = new SelectList(leaveTypes, "Id", "Name");
+        var selectLeaveTypes = new SelectList(leaveTypes, "Id", "Name", leaveTypeId);
         var model = new CreateLeaveRequestVM
         {
             StartDate = DateOnly.FromDateTime(DateTime.Now),
