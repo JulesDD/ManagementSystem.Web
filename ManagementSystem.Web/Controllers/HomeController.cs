@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using ManagementSystem.Web.Models;
+using ManagementSystem.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagementSystem.Web.Controllers

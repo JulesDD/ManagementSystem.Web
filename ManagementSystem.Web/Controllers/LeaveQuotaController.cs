@@ -1,6 +1,6 @@
-﻿using ManagementSystem.Web.Models.LeaveQuotas;
-using ManagementSystem.Web.Services.LeaveQuotas;
-using ManagementSystem.Web.Services.LeaveTypes;
+﻿using ManagementSystem.Application.Models.LeaveQuotas;
+using ManagementSystem.Application.Services.LeaveQuotas;
+using ManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

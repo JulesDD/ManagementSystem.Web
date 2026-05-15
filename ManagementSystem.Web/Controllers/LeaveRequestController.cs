@@ -1,6 +1,6 @@
-﻿using ManagementSystem.Web.Models.LeaveRequests;
-using ManagementSystem.Web.Services.LeaveRequests;
-using ManagementSystem.Web.Services.LeaveTypes;
+﻿using ManagementSystem.Application.Models.LeaveRequests;
+using ManagementSystem.Application.Services.LeaveRequests;
+using ManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

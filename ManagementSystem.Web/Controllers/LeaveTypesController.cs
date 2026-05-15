@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ManagementSystem.Web.Data;
-using ManagementSystem.Web.Models.LeaveTypes;
+using ManagementSystem.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using ManagementSystem.Web.Services.LeaveTypes;
+using ManagementSystem.Application.Services.LeaveTypes;
+using ManagementSystem.Application.Models.LeaveTypes;
 
 namespace ManagementSystem.Web.Controllers;
 
